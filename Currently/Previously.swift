@@ -11,7 +11,10 @@ import SystemConfiguration
 
 class Previously: UIViewController {
 
+    var orgImg : String?
     var orgInfos : [String: String]?
+    
+    var destImg : String?
     var destInfos : [String: String]?
     
     var picker = Picker()
@@ -40,6 +43,28 @@ class Previously: UIViewController {
 
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if (orgImg != nil && orgImg != "") {
+            orgFlag.image = UIImage(named: orgImg!)
+        }
+        
+        if (orgInfos != nil && !(orgInfos?.isEmpty)!)
+        {
+            orgAmount.placeholder = orgInfos?["currencyName"]
+            orgCode.titleLabel?.text = orgInfos?["currencyId"]
+        }
+        
+        if (destImg != nil && destImg != "") {
+            destFlag.image = UIImage(named: destImg!)
+        }
+        
+        if (destInfos != nil && !(destInfos?.isEmpty)!)
+        {
+            destAmount.placeholder = destInfos?["currencyName"]
+            destCode.titleLabel?.text = destInfos?["currencyId"]
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,8 +98,30 @@ class Previously: UIViewController {
         convert(sender)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? Picker
+            {
+                destination.is_src = false
+            }
+        }
+    
+    @IBAction func changeOrg(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier :"Picker")
+        self.present(viewController, animated: true)
+    }
+    
+    
+    
+    @IBAction func changeDest(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier :"Picker")
+        self.present(viewController, animated: true)
+    }
+    
     
     @IBAction func convert(_ sender: Any) {
+        //reloadInfos()
         if (orgAmount.text == nil || orgAmount.text == ""){
             return
         }

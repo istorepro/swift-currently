@@ -12,7 +12,10 @@ import MapKit
 
 class Picker: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate, UISearchBarDelegate {
     
-    var currencies : (Any)? = nil;
+    var is_src = true
+
+    
+    var currencies : (Any)? = nil
     
     var arr : [(String, Any)?] = []
     var filtered : [(String, Any)?] = []
@@ -82,6 +85,10 @@ class Picker: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
         return arr.count
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "segue", sender: self)
+    }
+    
     
     internal func tableView(_ tableView:UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -113,10 +120,42 @@ class Picker: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
         
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        getInfos(infos: (arr[indexPath.item]))
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+            if (is_src)
+            {
+                if  segue.identifier == "segue",
+                    let destination = segue.destination as? Previously,
+                    let index = tableView.indexPathForSelectedRow?.row
+                {
+                    if is_searching {
+                        destination.orgInfos = filtered[index]?.1 as! [String: String]?
+                        destination.orgImg = filtered[index]!.0
+                    } else {
+                    destination.orgInfos = arr[index]?.1 as! [String: String]?
+                    destination.orgImg = arr[index]!.0
+                    }
+                }
+            }
+            else
+            {
+                if  segue.identifier == "segue",
+                    let destination = segue.destination as? Previously,
+                    let index = tableView.indexPathForSelectedRow?.row
+                {
+                    if is_searching {
+                    destination.destImg = filtered[index]!.0
+                    destination.destInfos = filtered[index]?.1 as! [String: String]?
+                    } else {
+                        destination.destImg = arr[index]!.0
+                        destination.destInfos = arr[index]?.1 as! [String: String]?
+
+                    }
+                }
+            }
+        
     }
-    
+
     
     public func getFlag(id: String) -> String?
         
@@ -143,7 +182,7 @@ class Picker: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
                 
                 if (dictionnary["currencyId"] == id)
                 {
-                    return i?.1 as! [String: String]
+                    return i?.1 as! [String: String]?
                 }
             }
         }
@@ -158,6 +197,8 @@ class Picker: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == "" {
             is_searching = false
+            filtered = arr
+            tableView.reloadData()
         } else
         {
             is_searching = true
