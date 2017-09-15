@@ -22,9 +22,8 @@ class Picker: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+    public func buildArray()
+    {
         if let pathURL = Bundle.main.url(forResource: "currencies", withExtension: "json"){
             
             do {
@@ -38,6 +37,8 @@ class Picker: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
                 print (error.localizedDescription)
             }
             
+            arr.removeAll()
+            
             if let dictionary = currencies as? [String: Any] {
                 
                 for (key, value) in (dictionary["results"] as? [String: Any])! {
@@ -47,7 +48,14 @@ class Picker: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
             }
             
             arr = arr.sorted(by: { $0?.0.localizedCaseInsensitiveCompare(($1?.0)!) == ComparisonResult.orderedAscending})
-            
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        
+            buildArray()
             
             // self.tableView.register(TableViewCell.self, forCellReuseIdentifier: "testcell")
             self.tableView.delegate = self
@@ -59,8 +67,6 @@ class Picker: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
             
             super.viewDidLoad()
             
-        }
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -73,7 +79,7 @@ class Picker: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
         {
             return filtered.count
         }
-        return self.arr.count
+        return arr.count
     }
     
     
@@ -111,6 +117,39 @@ class Picker: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
         getInfos(infos: (arr[indexPath.item]))
     }
     
+    
+    public func getFlag(id: String) -> String?
+        
+    {
+        for i in arr {
+            if let dictionnary = i?.1 as! [String: String]?
+            {
+                
+                if (dictionnary["currencyId"] == id)
+                {
+                    return i?.0
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    public func getInfos(id: String) -> [String: String]?
+    {
+        for i in arr {
+            if let dictionnary = i?.1 as! [String: String]?
+            {
+                
+                if (dictionnary["currencyId"] == id)
+                {
+                    return i?.1 as! [String: String]
+                }
+            }
+        }
+        
+        return nil
+    }
     
     public func getInfos(infos: Any!) -> Any!     {
         return infos

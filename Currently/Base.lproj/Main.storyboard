@@ -42,6 +42,9 @@
                                 <date key="date" timeIntervalSinceReferenceDate="527135372.50171399">
                                     <!--2017-09-15 02:29:32 +0000-->
                                 </date>
+                                <connections>
+                                    <action selector="dateChanged:" destination="9pv-A4-QxB" eventType="valueChanged" id="mDk-3b-1DK"/>
+                                </connections>
                             </datePicker>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pick a date:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MZC-rT-juC">
                                 <rect key="frame" x="145" y="262" width="124" height="21"/>
@@ -58,6 +61,9 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <textInputTraits key="textInputTraits" keyboardType="ASCIICapableNumberPad" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                <connections>
+                                    <action selector="convert:" destination="9pv-A4-QxB" eventType="editingChanged" id="6Fv-Mf-P6o"/>
+                                </connections>
                             </textField>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="US" translatesAutoresizingMaskIntoConstraints="NO" id="YNd-34-BBU">
                                 <rect key="frame" x="0.0" y="72" width="120" height="61"/>
