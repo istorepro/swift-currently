@@ -7,16 +7,16 @@
 //
 
 import UIKit
-import Foundation
+import SystemConfiguration
 
 class Previously: UIViewController {
 
     @IBOutlet weak var orgAmount: UITextField!
-    @IBOutlet weak var orgCode: UILabel!
+    @IBOutlet weak var orgCode: UIButton!
     @IBOutlet weak var orgFlag: UIImageView!
     
     @IBOutlet weak var destAmount: UITextField!
-    @IBOutlet weak var destCode: UILabel!
+    @IBOutlet weak var destCode: UIButton!
     @IBOutlet weak var destFlag: UIImageView!
     
     @IBOutlet weak var datePicker: UIDatePicker!
@@ -25,37 +25,28 @@ class Previously: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        matchData()
-        
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    func getFlag() -> String
-    {
-        if let pathURL = Bundle.main.url(forResource: "currencies", withExtension: "json"){
-            
-            do {
-                
-                let jsonData = try Data(contentsOf: pathURL, options: .mappedIfSafe)
-                
-                let jsonResult = try JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as! [String: Any]
-                
-                
-            }catch(let error){
-                print (error.localizedDescription)
-            }
-        }
-        return "_unknown"
-    }
-
-    func matchData()
-    {
+    @IBAction func Swap(_ sender: Any) {
+        let keepAmount = orgAmount.text
+        let keepCode = orgCode.titleLabel?.text
+        let keepFlag = orgFlag.image
         
+        orgFlag.image = destFlag.image
+        orgCode.titleLabel?.text = destCode.titleLabel?.text
+        orgAmount.text = destAmount.text
+        
+        destAmount.text = keepAmount
+        destCode.titleLabel?.text = keepCode
+        destFlag.image = keepFlag
     }
+    
+    
 
 }
 
